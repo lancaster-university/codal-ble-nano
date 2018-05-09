@@ -40,19 +40,19 @@
         {
             "name":"codal-core",
             "url":"https://github.com/lancaster-university/codal-core",
-            "branch":"master",
+            "branch":"nrf52840",
             "type":"git"
         },
         {
             "name":"codal-mbedos",
             "url":"https://github.com/lancaster-university/codal-mbedos",
-            "branch":"master",
+            "branch":"nrf52840",
             "type":"git"
         },
         {
             "name":"codal-nrf52",
             "url":"https://github.com/lancaster-university/codal-nrf52",
-            "branch":"master",
+            "branch":"nrf52840",
             "type":"git"
         }
     ]
