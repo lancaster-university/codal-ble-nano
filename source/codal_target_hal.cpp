@@ -1,7 +1,8 @@
-#include "mbed.h"
+#include "cmsis.h"
 #include "codal_target_hal.h"
 #include "CodalDmesg.h"
 #include "CodalCompat.h"
+#include "nrf_delay.h"
 
 void target_enable_irq()
 {
@@ -18,14 +19,15 @@ void target_wait_for_event()
     __WFE();
 }
 
+void nrf_delay_ms(uint32_t);
 void target_wait(uint32_t milliseconds)
 {
-    wait_ms(milliseconds);
+    nrf_delay_ms(milliseconds);
 }
 
 void target_wait_us(unsigned long us)
 {
-    wait_us(us);
+    nrf_delay_us(us);
 }
 
 int target_seed_random(uint32_t rand)

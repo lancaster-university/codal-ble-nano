@@ -25,13 +25,11 @@ DEALINGS IN THE SOFTWARE.
 #ifndef BLE_NANO_H
 #define BLE_NANO_H
 
-#include "mbed.h"
-
 #include "CodalHeapAllocator.h"
 #include "codal-core/inc/types/Event.h"
 #include "CodalDevice.h"
 #include "ErrorNo.h"
-#include "MbedTimer.h"
+#include "NRF52Timer.h"
 #include "CodalCompat.h"
 #include "CodalComponent.h"
 #include "CodalDmesg.h"
@@ -43,9 +41,7 @@ DEALINGS IN THE SOFTWARE.
 #include "Button.h"
 #include "MultiButton.h"
 #include "NRF52Pin.h"
-#include "MbedI2C.h"
 
-#include "MbedSerial.h"
 #include "BLENanoIO.h"
 #include "CodalFiber.h"
 #include "MessageBus.h"
@@ -83,7 +79,7 @@ namespace codal
             MessageBus                  messageBus;
             // codal::_mbed::Serial        serial;
             ZSingleWireSerial           sws;
-            codal::_mbed::Timer         timer;
+            NRF52Timer         timer;
             //Button                      buttonA;
 
             // Persistent key value store

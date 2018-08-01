@@ -25,6 +25,8 @@ DEALINGS IN THE SOFTWARE.
 
 #include "BLENano.h"
 #include "Timer.h"
+#include "nrf52.h"
+#include "nrf52_bitfields.h"
 
 using namespace codal;
 

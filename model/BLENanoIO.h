@@ -25,7 +25,6 @@ DEALINGS IN THE SOFTWARE.
 #ifndef BLE_NANO_IO_H
 #define BLE_NANO_IO_H
 
-#include "mbed.h"
 #include "CodalConfig.h"
 #include "NRF52Pin.h"
 

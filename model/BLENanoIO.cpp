@@ -29,6 +29,7 @@ DEALINGS IN THE SOFTWARE.
 
 #include "CodalConfig.h"
 #include "BLENanoIO.h"
+#include "device_pinmap.h"
 
 using namespace codal;
 

@@ -22,7 +22,6 @@ add_library(codal-ble-nano ${TOP_LEVEL_SOURCE_FILES} ${MODEL_SOURCE_FILES})
 target_link_libraries(
     codal-ble-nano
     codal-core
-    codal-mbedos
     codal-nrf52
 )
 
