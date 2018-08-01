@@ -77,11 +77,12 @@ namespace codal
             // Pin ranges used for LED matrix display.
 
         public:
-
-            codal::_mbed::Serial        serial;
+            BLENanoIO                   io;
             MessageBus                  messageBus;
+            codal::_mbed::Serial        serial;
+
             codal::_mbed::Timer         timer;
-            BLENanoIO                  io;
+
             //Button                      buttonA;
 
             // Persistent key value store

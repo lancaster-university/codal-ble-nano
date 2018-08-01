@@ -37,10 +37,10 @@ BLENano *ble_nano_device_instance = NULL;
   * that represent various device drivers used to control aspects of the BLENano.
   */
 BLENano::BLENano() :
-    serial(P0_2, NC),
+    io(),
     messageBus(),
-    timer(),
-    io()
+    serial(io.P29, io.P30),
+    timer()
 {
     // Clear our status
     status = 0;
