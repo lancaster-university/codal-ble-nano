@@ -37,10 +37,11 @@ BLENano *ble_nano_device_instance = NULL;
   * that represent various device drivers used to control aspects of the BLENano.
   */
 BLENano::BLENano() :
-    serial(P0_2, NC),
+    io(),
     messageBus(),
-    timer(),
-    io()
+    // serial(io.P29, io.P30),
+    sws(io.P29),
+    timer()
 {
     // Clear our status
     status = 0;
@@ -67,7 +68,7 @@ BLENano::BLENano() :
 
     // Configure serial port for debugging
     //serial.set_flow_control(mbed::Serial::Disabled);
-    serial.baud(115200);
+    // serial.baud(115200);
 }
 
 /**
@@ -140,13 +141,13 @@ void nano_dmesg_flush()
 {
 #if CONFIG_ENABLED(DMESG_SERIAL_DEBUG)
 #if DEVICE_DMESG_BUFFER_SIZE > 0
-    if (codalLogStore.ptr > 0 && ble_nano_device_instance)
-    {
-        for (uint32_t i=0; i<codalLogStore.ptr; i++)
-            ((BLENano *)ble_nano_device_instance)->serial.putc(codalLogStore.buffer[i]);
+    // if (codalLogStore.ptr > 0 && ble_nano_device_instance)
+    // {
+    //     for (uint32_t i=0; i<codalLogStore.ptr; i++)
+    //         ((BLENano *)ble_nano_device_instance)->serial.putc(codalLogStore.buffer[i]);
 
-        codalLogStore.ptr = 0;
-    }
+    //     codalLogStore.ptr = 0;
+    // }
 #endif
 #endif
 }
