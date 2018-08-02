@@ -14,60 +14,54 @@ using namespace codal;
 
 ZSingleWireSerial* ZSingleWireSerial::instance = NULL;
 
-extern void set_gpio(int);
-
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-void UARTE0_UART0_IRQHandler()
+void UARTE0_UART0_IRQHandler_v()
 {
-    set_gpio(1);
-    // if (ZSingleWireSerial::instance == NULL)
-    // {
+    if (ZSingleWireSerial::instance == NULL)
+    {
         NRF_UARTE0->EVENTS_ENDRX = 0;
         NRF_UARTE0->EVENTS_ENDTX = 0;
         NRF_UARTE0->EVENTS_ERROR = 0;
-    //     return;
-    // }
+        return;
+    }
 
-    // // keep processing minimal
-    // // any processing will result in lost bytes, or radio timing irregularities.
-    // if (NRF_UARTE0->EVENTS_ENDRX)
-    // {
-    //     DMESG("RX");
-    //     NRF_UARTE0->EVENTS_ENDRX = 0;
-    //     ZSingleWireSerial::instance->configureRxInterrupt(0);
+    // keep processing minimal
+    // any processing will result in lost bytes, or radio timing irregularities.
+    if (NRF_UARTE0->EVENTS_ENDRX)
+    {
+        DMESG("RX");
+        NRF_UARTE0->EVENTS_ENDRX = 0;
+        ZSingleWireSerial::instance->configureRxInterrupt(0);
 
-    //     Event evt(0, SWS_EVT_DATA_RECEIVED, 0, CREATE_ONLY);
-    //     if (ZSingleWireSerial::instance->cb)
-    //         ZSingleWireSerial::instance->cb->fire(evt);
-    // }
+        Event evt(0, SWS_EVT_DATA_RECEIVED, 0, CREATE_ONLY);
+        if (ZSingleWireSerial::instance->cb)
+            ZSingleWireSerial::instance->cb->fire(evt);
+    }
+    else if (NRF_UARTE0->EVENTS_ENDTX)
+    {
+        DMESG("TX");
+        NRF_UARTE0->EVENTS_ENDTX = 0;
+        ZSingleWireSerial::instance->configureTxInterrupt(0);
 
-    // if (NRF_UARTE0->EVENTS_ENDTX)
-    // {
-    //     DMESG("TX");
-    //     NRF_UARTE0->EVENTS_ENDTX = 0;
-    //     ZSingleWireSerial::instance->configureTxInterrupt(0);
+        Event evt(0, (uint16_t)SWS_EVT_DATA_SENT, 0, CREATE_ONLY);
 
-    //     Event evt(0, (uint16_t)SWS_EVT_DATA_SENT, 0, CREATE_ONLY);
+        if (ZSingleWireSerial::instance->cb)
+            ZSingleWireSerial::instance->cb->fire(evt);
+    }
+    else if (NRF_UARTE0->EVENTS_ERROR && (NRF_UARTE0->INTENSET & UARTE_INTENSET_ERROR_Msk))
+    {
+        DMESG("ERR %d", NRF_UARTE0->ERRORSRC);
+        NRF_UARTE0->EVENTS_ERROR = 0;
+        ZSingleWireSerial::instance->abortDMA();
 
-    //     if (ZSingleWireSerial::instance->cb)
-    //         ZSingleWireSerial::instance->cb->fire(evt);
-    // }
-
-    // if (NRF_UARTE0->EVENTS_ERROR)
-    // {
-    //     DMESG("ERR");
-    //     NRF_UARTE0->EVENTS_ERROR = 0;
-    //     ZSingleWireSerial::instance->abortDMA();
-
-    //     Event evt(0, (uint16_t)SWS_EVT_ERROR, 0, CREATE_ONLY);
-    //     if (ZSingleWireSerial::instance->cb)
-    //         ZSingleWireSerial::instance->cb->fire(evt);
-
-    //     // NRF_UARTE0->ERRORSRC |= UART_ERRORSRC_OVERRUN_Msk;
-    // }
+        Event evt(0, (uint16_t)SWS_EVT_ERROR, 0, CREATE_ONLY);
+        if (ZSingleWireSerial::instance->cb)
+            ZSingleWireSerial::instance->cb->fire(evt);
+        // NRF_UARTE0->ERRORSRC |= UART_ERRORSRC_OVERRUN_Msk;
+    }
 }
 
 #ifdef __cplusplus
@@ -163,8 +157,8 @@ ZSingleWireSerial::ZSingleWireSerial(Pin& p) : DMASingleWireSerial(p)
     setBaud(115200);
 
     NVIC_DisableIRQ(UARTE0_UART0_IRQn);
-    // NVIC_SetPriority(UARTE0_UART0_IRQn, 1);
-    NVIC_SetVector(UARTE0_UART0_IRQn, (uint32_t)UARTE0_UART0_IRQHandler);
+    NVIC_SetPriority(UARTE0_UART0_IRQn, 1);
+    // NVIC_SetVector(UARTE0_UART0_IRQn, (uint32_t)UARTE0_UART0_IRQHandler);
     NVIC_EnableIRQ(UARTE0_UART0_IRQn);
 
     status |= DEVICE_COMPONENT_RUNNING;
@@ -204,7 +198,6 @@ int ZSingleWireSerial::sendDMA(uint8_t* data, int len)
     return DEVICE_OK;
 }
 
-// asynchronous read (WHY NO DMA NORDIC?)
 int ZSingleWireSerial::receiveDMA(uint8_t* data, int len)
 {
     if (!(status & RX_CONFIGURED))
@@ -227,6 +220,7 @@ int ZSingleWireSerial::abortDMA()
 
     NRF_UARTE0->RXD.MAXCNT = 0;
     NRF_UARTE0->TXD.MAXCNT = 0;
+
     return DEVICE_OK;
 }
 

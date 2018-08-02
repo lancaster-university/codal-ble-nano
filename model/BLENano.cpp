@@ -41,9 +41,9 @@ BLENano *ble_nano_device_instance = NULL;
 BLENano::BLENano() :
     io(),
     // serial(io.P29, io.P30),
-    // sws(io.P29),
     timer(),
-    messageBus()
+    messageBus(),
+    sws(io.P30)
 {
     // Clear our status
     status = 0;

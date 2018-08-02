@@ -78,9 +78,9 @@ namespace codal
             BLENanoIO                   io;
 
             // codal::_mbed::Serial        serial;
-            // ZSingleWireSerial           sws;
-            NRF52Timer         timer;
+            NRF52Timer                  timer;
             MessageBus                  messageBus;
+            ZSingleWireSerial           sws;
             //Button                      buttonA;
 
             // Persistent key value store
