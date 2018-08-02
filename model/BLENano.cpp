@@ -43,7 +43,8 @@ BLENano::BLENano() :
     // serial(io.P29, io.P30),
     timer(),
     messageBus(),
-    sws(io.P30)
+    sws(io.P30),
+    radio()
 {
     // Clear our status
     status = 0;

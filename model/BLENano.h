@@ -46,6 +46,7 @@ DEALINGS IN THE SOFTWARE.
 #include "CodalFiber.h"
 #include "MessageBus.h"
 
+#include "NRF52Radio.h"
 
 // Status flag values
 #define DEVICE_INITIALIZED                    0x01
@@ -81,6 +82,8 @@ namespace codal
             NRF52Timer                  timer;
             MessageBus                  messageBus;
             ZSingleWireSerial           sws;
+
+            NRF52Radio                  radio;
             //Button                      buttonA;
 
             // Persistent key value store
