@@ -5,7 +5,7 @@
 #include "CodalComponent.h"
 #include "CodalConfig.h"
 #include "SingleWireSerial.h"
-#include "PktSerial.h"
+#include "JACDAC.h"
 #include "MemberFunctionCallback.h"
 
 #define SINGLE_WIRE_SERIAL_EVT_RX_FULL      1

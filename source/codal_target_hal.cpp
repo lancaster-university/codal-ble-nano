@@ -30,6 +30,11 @@ void target_wait_us(unsigned long us)
     nrf_delay_us(us);
 }
 
+uint32_t target_get_serial()
+{
+    return NRF_FICR->DEVICEID[1] ^ NRF_FICR->DEVICEID[0];
+}
+
 int target_seed_random(uint32_t rand)
 {
     return codal::seed_random(rand);
