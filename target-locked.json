@@ -1,6 +1,6 @@
 {
     "architecture": "CORTEX_M4F", 
-    "asm_flags": "-fno-exceptions -fno-unwind-tables --specs=nosys.specs", 
+    "asm_flags": "-fno-exceptions -fno-unwind-tables --specs=nosys.specs -mcpu=cortex-m4 -mthumb ", 
     "c_flags": "-std=c99 --specs=nosys.specs -Warray-bounds", 
     "cmake_definitions": {
         "MBED_LEGACY_TOOLCHAIN": "GCC_ARM;"
@@ -15,7 +15,7 @@
         "DEVICE_HEAP_ALLOCATOR": 1, 
         "DEVICE_PANIC_HEAP_FULL": 1, 
         "DEVICE_SRAM_BASE": "0x20000000", 
-        "DEVICE_SRAM_END": "0x20008000", 
+        "DEVICE_SRAM_END": "0x20010000", 
         "DEVICE_STACK_BASE": "DEVICE_SRAM_END", 
         "DEVICE_STACK_SIZE": 2048, 
         "DEVICE_TAG": 0, 
@@ -28,33 +28,27 @@
     }, 
     "cpp_flags": "-std=c++11 -fwrapv -fno-rtti -fno-threadsafe-statics -fno-exceptions -fno-unwind-tables -Wl,--gc-sections -Wl,--sort-common -Wl,--sort-section=alignment -Wno-array-bounds", 
     "cpu_opts": "-mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=softfp", 
-    "definitions": "-DNRF52 -DDEVICE_SRAM_END=0x20008000 -DTARGET_NRF52832 -D__CORTEX_M4 -DBLE_STACK_SUPPORT_REQD -DSOFTDEVICE_PRESENT -DS132  -DNORDIC -DMCU_NRF52 -DMCU_NRF52832 -DNRF5 -DSDK11 -DNRF52_COMMON -DTARGET_NORDIC_NRF52DK -DBOARD_PCA10040 -DS132 -DCONFIG_GPIO_AS_PINRESET -DBLE_STACK_SUPPORT_REQD -DSWI_DISABLE0 -DNRF52_PAN_12 -DNRF52_PAN_15 -DNRF52_PAN_58 -DNRF52_PAN_55 -DNRF52_PAN_54 -DNRF52_PAN_31 -DNRF52_PAN_30 -DNRF52_PAN_51 -DNRF52_PAN_36 -DNRF52_PAN_53 -DNRF52_PAN_20 -DNRF52_PAN_64 -DNRF52_PAN_62 -DNRF52_PAN_63 -DDEVICE_ANALOGIN -DDEVICE_ERROR_PATTERN -DDEVICE_I2C -DDEVICE_I2C_ASYNCH -DDEVICE_INTERRUPTIN -DDEVICE_LOWPOWERTIMER -DDEVICE_PORTIN -DDEVICE_PORTINOUT -DDEVICE_PORTOUT -DDEVICE_PWMOUT -DDEVICE_RTC -DDEVICE_SERIAL -DDEVICE_SERIAL_ASYNCH -DDEVICE_SERIAL_FC -DDEVICE_SLEEP -DDEVICE_SPI -DDEVICE_SPI_ASYNCH -DDEVICE_SPISLAVE -DMBED_CONF_PLATFORM_DEFAULT_SERIAL_BAUD_RATE=9600 -D__MBED__ -DMBED_RTOS_SINGLE_THREAD -DMBED_CONF_RTOS_PRESENT -DTOOLCHAIN_GCC", 
+    "definitions": "-DNRF52 -DDEVICE_SRAM_END=0x20010000 -DMBED_CONF_NORDIC_NRF_LF_CLOCK_SRC=NRF_LF_SRC_XTAL -DTARGET_NRF52832 -D__CORTEX_M4 -DBLE_STACK_SUPPORT_REQD -DSOFTDEVICE_PRESENT -DS132  -DNORDIC -DMCU_NRF52 -DMCU_NRF52832 -DNRF5 -DSDK11 -DNRF52_COMMON -DTARGET_NORDIC_NRF52DK -DBOARD_PCA10040 -DS132 -DCONFIG_GPIO_AS_PINRESET -DBLE_STACK_SUPPORT_REQD -DSWI_DISABLE0 -DNRF52_PAN_12 -DNRF52_PAN_15 -DNRF52_PAN_58 -DNRF52_PAN_55 -DNRF52_PAN_54 -DNRF52_PAN_31 -DNRF52_PAN_30 -DNRF52_PAN_51 -DNRF52_PAN_36 -DNRF52_PAN_53 -DNRF52_PAN_20 -DNRF52_PAN_64 -DNRF52_PAN_62 -DNRF52_PAN_63 -DDEVICE_ANALOGIN -DDEVICE_ERROR_PATTERN -DDEVICE_I2C -DDEVICE_I2C_ASYNCH -DDEVICE_INTERRUPTIN -DDEVICE_LOWPOWERTIMER -DDEVICE_PORTIN -DDEVICE_PORTINOUT -DDEVICE_PORTOUT -DDEVICE_PWMOUT -DDEVICE_RTC -DDEVICE_SERIAL -DDEVICE_SERIAL_ASYNCH -DDEVICE_SERIAL_FC -DDEVICE_SLEEP -DDEVICE_SPI -DDEVICE_SPI_ASYNCH -DDEVICE_SPISLAVE -DMBED_CONF_PLATFORM_DEFAULT_SERIAL_BAUD_RATE=9600 -D__MBED__ -DMBED_RTOS_SINGLE_THREAD -DTOOLCHAIN_GCC", 
     "device": "BLE_NANO", 
     "generate_bin": true, 
     "generate_hex": true, 
     "libraries": [
         {
-            "branch": "998df31f855e77f28395e469581cde9463f55007", 
+            "branch": "9ca404e62fea34040125f34e676349ea45df588c", 
             "name": "codal-core", 
             "type": "git", 
             "url": "https://github.com/lancaster-university/codal-core"
         }, 
         {
-            "branch": "ec689a7139261ce074ee154a574685ab2bc67f2b", 
-            "name": "codal-mbedos", 
-            "type": "git", 
-            "url": "https://github.com/lancaster-university/codal-mbedos"
-        }, 
-        {
-            "branch": "f0e1236803b188ba8b4fc1bd9f4e6b6870cb5a9f", 
+            "branch": "c8938c3ccd3b0cf31eb3c922b3660eb27280a90d", 
             "name": "codal-nrf52", 
             "type": "git", 
             "url": "https://github.com/lancaster-university/codal-nrf52"
         }
     ], 
-    "linker_flags": "-Wl,--no-wchar-size-warning -Wl,-wrap,main -Wl,--gc-sections -Wl,--wrap,exit -Wl,--wrap,atexit -mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=softfp -Wl,--start-group -lstdc++ -lsupc++ -lm -lc -lgcc -lnosys -Wl,--end-group", 
+    "linker_flags": "-Wl,--no-wchar-size-warning -Wl,--gc-sections -Wl,--wrap,atexit -mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=softfp -Wl,--start-group -lstdc++ -lsupc++ -lm -lc -lgcc -lnosys -Wl,--end-group", 
     "post_process": "", 
     "processor": "NRF52832", 
-    "snapshot_version": "v0.0.3", 
+    "snapshot_version": "v0.0.3-pktserial.0", 
     "toolchain": "ARM_GCC"
 }
