@@ -60,12 +60,12 @@ void target_panic(int statusCode)
     {
     }
 #else
-    Serial pc(USBTX, USBRX);
-    while (1)
-    {
-        pc.printf("*** CODAL PANIC : [%.3d]\n", statusCode);
-        wait_ms(500);
-    }
+    // Serial pc(USBTX, USBRX);
+    // while (1)
+    // {
+    //     pc.printf("*** CODAL PANIC : [%.3d]\n", statusCode);
+    //     wait_ms(500);
+    // }
 #endif
 }
 
