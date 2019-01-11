@@ -113,7 +113,12 @@ int BLENano::init()
     // which saves processor time, memeory and battery life.
     messageBus.listen(DEVICE_ID_MESSAGE_BUS_LISTENER, DEVICE_EVT_ANY, this, &BLENano::onListenerRegisteredEvent);
 
+#if CONFIG_ENABLED(DMESG_SERIAL_DEBUG)
+#if DEVICE_DMESG_BUFFER_SIZE > 0
     codal_dmesg_set_flush_fn(nano_dmesg_flush);
+#endif
+#endif
+
     status |= DEVICE_COMPONENT_STATUS_IDLE_TICK;
 
     return DEVICE_OK;
@@ -137,7 +142,9 @@ void BLENano::onListenerRegisteredEvent(Event evt)
   */
 void BLENano::idleCallback()
 {
+#if DEVICE_DMESG_BUFFER_SIZE > 0
     codal_dmesg_flush();
+#endif
 }
 
 void nano_dmesg_flush()
