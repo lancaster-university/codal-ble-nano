@@ -14,6 +14,9 @@ using namespace codal;
 
 ZSingleWireSerial* ZSingleWireSerial::instance = NULL;
 
+extern void set_gpio2(int);
+extern void set_gpio(int);
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -53,13 +56,15 @@ void UARTE0_UART0_IRQHandler_v()
     }
     else if (NRF_UARTE0->EVENTS_ERROR && (NRF_UARTE0->INTENSET & UARTE_INTENSET_ERROR_Msk))
     {
-        DMESG("ERR %d", NRF_UARTE0->ERRORSRC);
+        DMESG("ERR %d, state: %d", NRF_UARTE0->ERRORSRC, ZSingleWireSerial::instance->status & TX_CONFIGURED);
+        NRF_UARTE0->ERRORSRC = NRF_UARTE0->ERRORSRC;
         NRF_UARTE0->EVENTS_ERROR = 0;
         ZSingleWireSerial::instance->abortDMA();
 
         Event evt(0, (uint16_t)SWS_EVT_ERROR, 0, CREATE_ONLY);
         if (ZSingleWireSerial::instance->cb)
             ZSingleWireSerial::instance->cb->fire(evt);
+
         // NRF_UARTE0->ERRORSRC |= UART_ERRORSRC_OVERRUN_Msk;
     }
 }
@@ -72,7 +77,7 @@ void UARTE0_UART0_IRQHandler_v()
 void ZSingleWireSerial::configureRxInterrupt(int enable)
 {
     if (enable)
-        NRF_UARTE0->INTENSET |= (UARTE_INTENSET_ENDRX_Msk/* | UARTE_INTENSET_ERROR_Msk*/);
+        NRF_UARTE0->INTENSET |= (UARTE_INTENSET_ENDRX_Msk | UARTE_INTENSET_ERROR_Msk);
     else
         NRF_UARTE0->INTENCLR |= (UARTE_INTENCLR_ENDRX_Msk);
 }
@@ -97,7 +102,7 @@ int ZSingleWireSerial::configureTx(int enable)
         while(!(NRF_UARTE0->ENABLE));
         status |= TX_CONFIGURED;
     }
-    else if (status & TX_CONFIGURED)
+    else if (enable == 0 && status & TX_CONFIGURED)
     {
         NRF_UARTE0->TASKS_STOPTX = 1;
         while(NRF_UARTE0->TASKS_STOPTX);
@@ -154,7 +159,7 @@ ZSingleWireSerial::ZSingleWireSerial(Pin& p) : DMASingleWireSerial(p)
     NRF_UARTE0->PSEL.TXD = 0xFFFFFFFF;
     NRF_UARTE0->PSEL.RXD = 0xFFFFFFFF;
 
-    setBaud(115200);
+    setBaud(1000000);
 
     NVIC_DisableIRQ(UARTE0_UART0_IRQn);
     NVIC_SetPriority(UARTE0_UART0_IRQn, 1);
