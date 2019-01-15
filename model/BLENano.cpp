@@ -40,8 +40,8 @@ BLENano *ble_nano_device_instance = NULL;
   */
 BLENano::BLENano() :
     io(),
-    // serial(io.P29, io.P30),
-    timer(),
+    timer1(NRF_TIMER1, TIMER1_IRQn),
+    timer(timer1),
     messageBus(),
     sws(io.P30),
     radio()
