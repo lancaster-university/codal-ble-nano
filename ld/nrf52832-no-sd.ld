@@ -9,6 +9,7 @@ SECTIONS
 {
     .text :
     {
+        KEEP(*(.isr_vector))
         KEEP(*(.Vectors))
         *(.text*)
         KEEP(*(.init))
@@ -89,16 +90,6 @@ SECTIONS
         *(.heap*);
         ASSERT(. <= (ORIGIN(RAM) + LENGTH(RAM) - 0x800), "heap region overflowed into stack");
         . += (ORIGIN(RAM) + LENGTH(RAM) - 0x800) - .;
-    } > RAM
-    PROVIDE(__heap_start = ADDR(.heap));
-    PROVIDE(__heap_size = SIZEOF(.heap));
-    PROVIDE(__mbed_sbrk_start = ADDR(.heap));
-    PROVIDE(__mbed_krbs_start = ADDR(.heap) + SIZEOF(.heap));
-    .stack (NOLOAD):
-    {
-        __StackLimit = .;
-        *(.stack*)
-        . += (ORIGIN(RAM) + LENGTH(RAM) - .);
     } > RAM
     __StackTop = ORIGIN(RAM) + LENGTH(RAM);
     __StackLimit = __StackTop - SIZEOF(.stack);
