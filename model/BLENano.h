@@ -76,15 +76,17 @@ namespace codal
             // Pin ranges used for LED matrix display.
 
         public:
-
-            BLENanoIO                   io;
+            MessageBus                  messageBus;
 
             NRFLowLevelTimer            timer1;
+            NRFLowLevelTimer            timer2;
             Timer                       timer;
-            MessageBus                  messageBus;
+            BLENanoIO                   io;
+
             ZSingleWireSerial           sws;
 
             NRF52Radio                  radio;
+            JACDAC                      jacdac;
             //Button                      buttonA;
 
             // Persistent key value store
