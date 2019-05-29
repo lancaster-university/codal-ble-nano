@@ -82,11 +82,12 @@ namespace codal
             NRFLowLevelTimer            timer2;
             Timer                       timer;
             BLENanoIO                   io;
+            NRF52Radio                  radio;
 
             ZSingleWireSerial           sws;
-
-            NRF52Radio                  radio;
+            JDPhysicalLayer             phys;
             JACDAC                      jacdac;
+
             //Button                      buttonA;
 
             // Persistent key value store
