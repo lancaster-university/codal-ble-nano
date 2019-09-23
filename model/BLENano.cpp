@@ -25,6 +25,8 @@ DEALINGS IN THE SOFTWARE.
 
 #include "BLENano.h"
 #include "Timer.h"
+#include "nrf52.h"
+#include "nrf52_bitfields.h"
 
 using namespace codal;
 
@@ -37,10 +39,15 @@ BLENano *ble_nano_device_instance = NULL;
   * that represent various device drivers used to control aspects of the BLENano.
   */
 BLENano::BLENano() :
-    serial(P0_2, NC),
     messageBus(),
-    timer(),
-    io()
+    timer1(NRF_TIMER1, TIMER1_IRQn),
+    timer2(NRF_TIMER2, TIMER2_IRQn),
+    timer(timer1),
+    io(),
+    radio(),
+    sws(io.P2),
+    phys(sws,timer2),
+    jacdac(phys)
 {
     // Clear our status
     status = 0;
@@ -49,7 +56,7 @@ BLENano::BLENano() :
     // Ensure NFC pins are configured as GPIO. If not, update the non-volatile UICR.
     if (NRF_UICR->NFCPINS)
     {
-        DMESG("RESET UICR\n");
+      DMESG("RESET UICR\n");
         // Enable Flash Writes
         NRF_NVMC->CONFIG = (NVMC_CONFIG_WEN_Wen << NVMC_CONFIG_WEN_Pos);
         while (NRF_NVMC->READY == NVMC_READY_READY_Busy);
@@ -67,7 +74,7 @@ BLENano::BLENano() :
 
     // Configure serial port for debugging
     //serial.set_flow_control(mbed::Serial::Disabled);
-    serial.baud(115200);
+    // serial.baud(115200);
 }
 
 /**
@@ -109,7 +116,12 @@ int BLENano::init()
     // which saves processor time, memeory and battery life.
     messageBus.listen(DEVICE_ID_MESSAGE_BUS_LISTENER, DEVICE_EVT_ANY, this, &BLENano::onListenerRegisteredEvent);
 
+#if CONFIG_ENABLED(DMESG_SERIAL_DEBUG)
+#if DEVICE_DMESG_BUFFER_SIZE > 0
     codal_dmesg_set_flush_fn(nano_dmesg_flush);
+#endif
+#endif
+
     status |= DEVICE_COMPONENT_STATUS_IDLE_TICK;
 
     return DEVICE_OK;
@@ -133,20 +145,22 @@ void BLENano::onListenerRegisteredEvent(Event evt)
   */
 void BLENano::idleCallback()
 {
+#if DEVICE_DMESG_BUFFER_SIZE > 0
     codal_dmesg_flush();
+#endif
 }
 
 void nano_dmesg_flush()
 {
 #if CONFIG_ENABLED(DMESG_SERIAL_DEBUG)
 #if DEVICE_DMESG_BUFFER_SIZE > 0
-    if (codalLogStore.ptr > 0 && ble_nano_device_instance)
-    {
-        for (uint32_t i=0; i<codalLogStore.ptr; i++)
-            ((BLENano *)ble_nano_device_instance)->serial.putc(codalLogStore.buffer[i]);
+    // if (codalLogStore.ptr > 0 && ble_nano_device_instance)
+    // {
+    //     for (uint32_t i=0; i<codalLogStore.ptr; i++)
+    //         ((BLENano *)ble_nano_device_instance)->serial.putc(codalLogStore.buffer[i]);
 
-        codalLogStore.ptr = 0;
-    }
+    //     codalLogStore.ptr = 0;
+    // }
 #endif
 #endif
 }

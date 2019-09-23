@@ -1,6 +1,8 @@
-#include "mbed.h"
+#include "cmsis.h"
 #include "codal_target_hal.h"
 #include "CodalDmesg.h"
+#include "CodalCompat.h"
+#include "nrf_delay.h"
 
 void target_enable_irq()
 {
@@ -17,9 +19,30 @@ void target_wait_for_event()
     __WFE();
 }
 
+void nrf_delay_ms(uint32_t);
 void target_wait(uint32_t milliseconds)
 {
-    wait_ms(milliseconds);
+    nrf_delay_ms(milliseconds);
+}
+
+void target_wait_us(unsigned long us)
+{
+    nrf_delay_us(us);
+}
+
+uint64_t target_get_serial()
+{
+    return ((uint64_t)NRF_FICR->DEVICEID[1] << 32 | NRF_FICR->DEVICEID[0]) ^ ((uint64_t)NRF_FICR->DEVICEID[2] << 16);
+}
+
+int target_seed_random(uint32_t rand)
+{
+    return codal::seed_random(rand);
+}
+
+int target_random(int max)
+{
+    return codal::random(max);
 }
 
 void target_reset()
@@ -37,12 +60,12 @@ void target_panic(int statusCode)
     {
     }
 #else
-    Serial pc(USBTX, USBRX);
-    while (1)
-    {
-        pc.printf("*** CODAL PANIC : [%.3d]\n", statusCode);
-        wait_ms(500);
-    }
+    // Serial pc(USBTX, USBRX);
+    // while (1)
+    // {
+    //     pc.printf("*** CODAL PANIC : [%.3d]\n", statusCode);
+    //     wait_ms(500);
+    // }
 #endif
 }
 

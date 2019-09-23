@@ -25,30 +25,29 @@ DEALINGS IN THE SOFTWARE.
 #ifndef BLE_NANO_H
 #define BLE_NANO_H
 
-#include "mbed.h"
-
 #include "CodalHeapAllocator.h"
 #include "codal-core/inc/types/Event.h"
 #include "CodalDevice.h"
 #include "ErrorNo.h"
-#include "MbedTimer.h"
+#include "NRFLowLevelTimer.h"
 #include "CodalCompat.h"
 #include "CodalComponent.h"
 #include "CodalDmesg.h"
 #include "ManagedType.h"
 #include "ManagedString.h"
 #include "NotifyEvents.h"
+#include "ZSingleWireSerial.h"
 
 #include "Button.h"
 #include "MultiButton.h"
+#include "Timer.h"
 #include "NRF52Pin.h"
-#include "MbedI2C.h"
 
-#include "MbedSerial.h"
 #include "BLENanoIO.h"
 #include "CodalFiber.h"
 #include "MessageBus.h"
 
+#include "NRF52Radio.h"
 
 // Status flag values
 #define DEVICE_INITIALIZED                    0x01
@@ -77,11 +76,18 @@ namespace codal
             // Pin ranges used for LED matrix display.
 
         public:
-
-            codal::_mbed::Serial        serial;
             MessageBus                  messageBus;
-            codal::_mbed::Timer         timer;
-            BLENanoIO                  io;
+
+            NRFLowLevelTimer            timer1;
+            NRFLowLevelTimer            timer2;
+            Timer                       timer;
+            BLENanoIO                   io;
+            NRF52Radio                  radio;
+
+            ZSingleWireSerial           sws;
+            JDPhysicalLayer             phys;
+            JACDAC                      jacdac;
+
             //Button                      buttonA;
 
             // Persistent key value store
