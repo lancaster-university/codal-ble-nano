@@ -87,27 +87,11 @@ SECTIONS
         *(COMMON)
         . = ALIGN(4);
         __bss_end__ = .;
-    } > RAM
-    .heap (NOLOAD):
-    {
         __end__ = .;
         end = __end__;
-        *(.heap*);
-        ASSERT(. <= (ORIGIN(RAM) + LENGTH(RAM) - 0x800), "heap region overflowed into stack");
-        . += (ORIGIN(RAM) + LENGTH(RAM) - 0x800) - .;
     } > RAM
-    PROVIDE(__heap_start = ADDR(.heap));
-    PROVIDE(__heap_size = SIZEOF(.heap));
-    PROVIDE(__mbed_sbrk_start = ADDR(.heap));
-    PROVIDE(__mbed_krbs_start = ADDR(.heap) + SIZEOF(.heap));
-    .stack (NOLOAD):
-    {
-        __StackLimit = .;
-        *(.stack*)
-        . += (ORIGIN(RAM) + LENGTH(RAM) - .);
-    } > RAM
+
     __StackTop = ORIGIN(RAM) + LENGTH(RAM);
-    __StackLimit = __StackTop - SIZEOF(.stack);
     PROVIDE(__stack = __StackTop);
 }
 
