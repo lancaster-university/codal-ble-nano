@@ -85,8 +85,6 @@ namespace codal
             NRF52Radio                  radio;
 
             ZSingleWireSerial           sws;
-            JDPhysicalLayer             phys;
-            JACDAC                      jacdac;
 
             //Button                      buttonA;
 
