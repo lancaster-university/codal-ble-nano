@@ -45,9 +45,7 @@ BLENano::BLENano() :
     timer(timer1),
     io(),
     radio(),
-    sws(io.P2),
-    phys(sws,timer2),
-    jacdac(phys)
+    sws(io.P2)
 {
     // Clear our status
     status = 0;
